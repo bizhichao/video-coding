@@ -123,18 +123,20 @@ class DCGAN(object):
             # set up placeholder
             self.training = tf.placeholder(tf.bool)
             self.z = tf.placeholder(tf.float32, [None, self.nz])
-            self.image_real = image_inputer.inputs("train", self.batch_size)
-            # add summary to placeholder
-            tf.summary.image('image_real', self.image_real)
             tf.summary.histogram("z", self.z)
 
+            self.image_real = image_inputer.inputs("train", self.batch_size)
+            tf.summary.image('image_real', self.image_real)
+            image_real = (self.image_real - 127.5) / 127.5
+            logit_real = discriminator(image_real, training=self.training, reuse=None)
+
             # generate image from random vector: z
-            self.image_fake = generator(self.z, training=self.training)
+            image_fake = generator(self.z, training=self.training)
+            logit_fake = discriminator(image_fake, training=self.training, reuse=True)
+            self.image_fake = (image_fake * 127.5) + 127.5
             tf.summary.image('image_fake', self.image_fake)
 
             # criticize real image and fake image using discriminator/critic
-            logit_real = discriminator(self.image_real, training=self.training, reuse=None)
-            logit_fake = discriminator(self.image_fake, training=self.training, reuse=True)
             self.errD, self.errG = self._build_loss(logit_real, logit_fake)
 
             # set up optimizer to optimize loss
