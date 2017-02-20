@@ -55,6 +55,7 @@ class CelebALoader(object):
         resized_image_size = n_positive_integers(2, self.image_size)
         resized_image_4d = tf.image.resize_bilinear(decoded_image_4d, resized_image_size)
         resized_image = tf.squeeze(resized_image_4d, axis=[0])
+
         return resized_image
 
     def inputs(self, data_key, batch_size, num_epochs=None, shuffle=False):
