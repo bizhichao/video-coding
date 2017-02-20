@@ -102,20 +102,19 @@ class GAN(object):
             self._scope_name = scope.name
             self.train_phase = tf.placeholder(tf.bool)
 
+            # real image
             self.images = tf.placeholder(tf.float32, [None, self.image_size, self.image_size, 3])
             tf.summary.image("real_images", self.images, max_outputs=5)
+            img = (self.images - 127.5) / 127.5
+            prob_real, logits_real, feature_real = self.discriminator(img, self.train_phase, reuse=None)
 
+            # fake image
             self.z_vec = tf.placeholder(tf.float32, [None, self.z_dim])
             tf.summary.histogram("z", self.z_vec)
-
             self.gen_images = self.generator(self.z_vec, train_phase=self.train_phase)
+            prob_fake, logits_fake, feature_fake = self.discriminator(self.gen_images, self.train_phase, reuse=True)
             self.gen_images = self.gen_images * 127.5 + 127.5
             tf.summary.image("gen_images", self.gen_images, max_outputs=5)
-
-            img = (self.images - 127.5) / 127.5
-            gen_img = (self.gen_images - 127.5) / 127.5
-            prob_real, logits_real, feature_real = self.discriminator(img, self.train_phase, reuse=None)
-            prob_fake, logits_fake, feature_fake = self.discriminator(gen_img, self.train_phase, reuse=True)
 
             # Loss calculation
             self.disc_loss, self.gen_loss = self._gan_loss(logits_real, logits_fake, improve_loss,
