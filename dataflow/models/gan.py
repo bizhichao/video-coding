@@ -50,7 +50,7 @@ class DCGAN_G(object):
             net = tf.layers.conv2d_transpose(net, self._nc, kernel_size=(4, 4), strides=(2, 2),
                                              padding='same', use_bias=False)
             net = tf.layers.batch_normalization(net, training=training)
-            net = self._activation(net)
+            net = tf.nn.tanh(net)
         return net
 
     def scope(self):
