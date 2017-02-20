@@ -57,6 +57,10 @@ logits = fc_layer(fc1, 1024, 10, "fc2")
 # 计算损失函数
 with tf.name_scope("xent"):
     xent = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=y))
+    var_lists = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES)
+    l1_loss = 0.
+    for var in var_lists:
+        l1_loss += tf.reduce_mean(tf.abs(var))
     tf.summary.scalar('cross_entropy', xent)
 
 # 设置训练器

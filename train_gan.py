@@ -9,9 +9,8 @@ tf.flags.DEFINE_string("data_dir", "F:/img_align_celeba", "path to dataset")
 
 tf.flags.DEFINE_integer("model", "0", "Model to train. 0 - GAN, 1 - WassersteinGAN")
 
-tf.flags.DEFINE_string("optimizer", "Adam", "Optimizer to use for training")
+tf.flags.DEFINE_string("optimizer", "RMSProp", "Optimizer to use for training")
 tf.flags.DEFINE_float("lr", "0.01", "Learning rate for Adam Optimizer")
-
 
 tf.flags.DEFINE_integer("batch_size", 64, "batch size for training")
 tf.flags.DEFINE_integer("ngf", 64, "# of genrator's first filters")

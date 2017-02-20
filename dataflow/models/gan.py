@@ -1,7 +1,5 @@
 import tensorflow as tf
 import numpy as np
-from dataflow.loader import celeba
-
 
 class DCGAN_G(object):
     def __init__(self, isize, nc, ngf, n_extra_layers=0, activation=tf.nn.relu, scope=None):
@@ -251,10 +249,10 @@ class WGAN(DCGAN):
 
     def _build_loss(self, logit_real, logit_fake, **kwargs):
         # get loss for discriminator/critic
-        errD = -tf.reduce_mean(logit_real - logit_fake)
+        errD = tf.reduce_mean(logit_real - logit_fake)
         tf.summary.scalar('errD', errD)
         # get loss for generator
-        errG = -tf.reduce_mean(logit_fake)
+        errG = tf.reduce_mean(logit_fake)
         tf.summary.scalar('errG', errG)
         return errD, errG
 
