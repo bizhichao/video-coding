@@ -30,7 +30,7 @@ class CelebALoader(object):
             images.extend(glob.glob(file_glob))
 
         if not images:
-            raise FileNotFoundError('No images found in {}'.format(self.data_dir))
+            raise ValueError('No images found in {}'.format(self.data_dir))
 
         np.random.shuffle(images)
 
